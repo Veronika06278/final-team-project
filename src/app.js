@@ -26,21 +26,18 @@ page('/details/:id', detailsPage);
 page('/edit/:id', requireLogin, editPage);
 page('/search', searchPage);
 page('/logout', onLogout);
+
 page.start();
 
 function onLogout(ctx) {
 	logout();
 	ctx.page.redirect('/');
 }
+
 function requireLogin(ctx, next) {
-	if (!getAccessToken()) {;
-		return page.redirect('/login');
+	if (getAccessToken() == null) {
+	  return page.redirect('/login');
 	}
-
-
-	next();
-}
-function getAccessToken() {
-	const user = JSON.parse(sessionStorage.getItem('user')); 
-	return user ? user.accessToken : null; 
+  
+	return next();
 }

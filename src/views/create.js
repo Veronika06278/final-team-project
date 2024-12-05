@@ -12,12 +12,14 @@ const createTemplate = (onSubmit) => html`
 					name="name"
 					id="name"
 					placeholder="Fruit Name"
+					required
 				/>
 				<input
 					type="text"
 					name="imageUrl"
 					id="Fruit-image"
 					placeholder="Fruit Image"
+					required
 				/>
 				<textarea
 					id="fruit-description"
@@ -25,6 +27,7 @@ const createTemplate = (onSubmit) => html`
 					placeholder="Description"
 					rows="10"
 					cols="50"
+					required
 				></textarea>
 				<textarea
 					id="fruit-nutrition"
@@ -32,6 +35,7 @@ const createTemplate = (onSubmit) => html`
 					placeholder="Nutrition"
 					rows="10"
 					cols="50"
+					required
 				></textarea>
 				<button type="submit">Add Fruit</button>
 			</form>
@@ -44,21 +48,18 @@ export function createPage(ctx) {
 }
 
 async function onSubmit(ctx, data, event) {
-	
-	if (!data.name.trim() || !data.imageUrl.trim() || !data.description.trim() || !data.nutrition.trim()) {
-		alert("All fields are required!");
-		return; 
-	}
 
+	if (!data.name || !data.imageUrl || !data.description || !data.nutrition) {
+		return alert('All fields are required!');
+	}
 	
 	await service.create({
-		name: data.name.trim(),
-		imageUrl: data.imageUrl.trim(),
-		description: data.description.trim(),
-		nutrition: data.nutrition.trim(),
+		name: data.name,
+		imageUrl: data.imageUrl,
+		description: data.description,
+		nutrition: data.nutrition,
 	});
 
-	
 	event.target.reset();
 	ctx.page.redirect('/');
 }

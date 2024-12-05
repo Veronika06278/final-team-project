@@ -2,35 +2,30 @@ import { html, nothing } from '../../node_modules/lit-html/lit-html.js';
 import * as service from '../api/data.js';
 
 const cardTemplate = (fruit) => html`
-	<div class="fruit-card">
-		<img src=${fruit.imageUrl} alt="${fruit.name}" class="fruit-image" />
-		<div class="fruit-info">
-			<h3>${fruit.name}</h3>
-			<p>${fruit.description}</p>
-			<a href="/details/${fruit._id}" class="details-button">More Info</a>
-		</div>
+	<div class="fruit">
+		<img src=${fruit.imageUrl} alt="example1" />
+		<h3 class="title">${fruit.name}</h3>
+		<p class="description">${fruit.description}</p>
+		<a class="details-btn" href="/details/${fruit._id}">More Info</a>
 	</div>
 `;
-
-
 const searchTemplate = (fruits, onSubmit) => html`
-	<section id="search-wrapper">
-		<div id="search-bar">
+	<section id="search">
+		<div class="form">
 			<h2>Search</h2>
-			<form @submit=${onSubmit}>
-				<input type="text" name="search" id="search-input" placeholder="Enter fruit name..." />
-				<button type="submit" id="search-button">SEARCH</button>
+			<form class="search-form" @submit=${onSubmit}>
+				<input type="text" name="search" id="search-input" />
+				<button class="button-list">Search</button>
 			</form>
 		</div>
 		<h4>Results:</h4>
-		<div id="search-results">
+		<div class="search-result">
 			${fruits.length > 0
 				? fruits.map(cardTemplate)
-				: html`<p class="no-results">No results found.</p>`}
+				: html`<p class="no-result">No result.</p>`}
 		</div>
 	</section>
 `;
-
 
 export async function searchPage(ctx) {
 	let fruits = [];
@@ -39,8 +34,7 @@ export async function searchPage(ctx) {
 	async function onSubmit(event) {
 		event.preventDefault();
 		const formData = new FormData(event.target);
-		const query = formData.get('search').trim();
-
+		const query = formData.get('search');
 		if (query === '') {
 			return alert('Field is required!');
 		}

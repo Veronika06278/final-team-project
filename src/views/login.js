@@ -8,18 +8,20 @@ const loginTemplate = (onSubmit) => html`
 			<h2>Login</h2>
 			<form class="login-form" @submit=${onSubmit}>
 				<input
-					type="text"
+					type="email"
 					name="email"
 					id="email"
-					placeholder="email"
+					placeholder="Email"
+					required
 				/>
 				<input
 					type="password"
 					name="password"
 					id="password"
-					placeholder="password"
+					placeholder="Password"
+					required
 				/>
-				<button type="submit">login</button>
+				<button type="submit">Login</button>
 				<p class="message">
 					Not registered? <a href="/register">Create an account</a>
 				</p>
@@ -33,21 +35,18 @@ export async function loginPage(ctx) {
 }
 
 async function onSubmit(ctx, data, event) {
-	
+	// Check if any field is empty manually (optional as the 'required' attribute already does this)
 	if (data.email === '' || data.password === '') {
 		return alert('All fields are required!');
 	}
 
+	// Call the login service function
 	try {
-		
 		await userService.login(data.email, data.password);
-
-		
-		event.target.reset();
-		ctx.page.redirect('/');
-
-	} catch (err) {
-		
-		alert('Login failed: ' + err.message);
+		event.target.reset();  // Reset the form
+		ctx.page.redirect('/');  // Redirect to the home page after successful login
+	} catch (error) {
+		// Handle errors, for example incorrect login credentials
+		alert('Invalid email or password!');
 	}
 }

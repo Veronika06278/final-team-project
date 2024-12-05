@@ -52,22 +52,17 @@ export async function editPage(ctx) {
 
 async function onSubmit(ctx, data, event) {
 	const id = ctx.params.id;
-
-	
-	if (Object.values(data).some((value) => !value.trim())) {
-		alert('All fields are required!');
-		return; 
+	if (Object.values(data).some((value) => value === '')) {
+		return alert('All fields are required!');
 	}
 
-	
 	await service.editById(id, {
-		name: data.name.trim(),
-		imageUrl: data.imageUrl.trim(),
-		description: data.description.trim(),
-		nutrition: data.nutrition.trim(),
+		name: data.name,
+		imageUrl: data.imageUrl,
+		description: data.description,
+		nutrition: data.nutrition,
 	});
 
-	
 	event.target.reset();
 	ctx.page.redirect('/details/' + id);
 }
